@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Organiza tu día</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    body{font-family:'Inter',-apple-system,sans-serif;background:#0f0f0f;color:#c8c8c8;min-height:100vh;}
+    ::selection{background:rgba(59,91,218,.3);color:#a0b4ff;}
+    :root{
+      --accent:#3b5bdb;--accent-dim:#1a1f2e;--accent-txt:#7c9ef8;
+      --bg:#0f0f0f;--card:#141414;--card-hover:#181818;
+      --b1:#1e1e1e;--b2:#262626;
+      --t1:#f0f0f0;--t2:#888;--t3:#444;--t4:#2e2e2e;--t5:#222;
+    }
+    .shell{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:64px 20px 48px;}
+    .container{width:100%;max-width:640px;}
+    .header{margin-bottom:40px;}
+    .eyebrow{display:block;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#2e2e2e;margin-bottom:16px;}
+    .title{font-size:28px;font-weight:600;color:var(--t1);letter-spacing:-.5px;line-height:1.2;margin-bottom:10px;}
+    .subtitle{font-size:14px;color:#555;line-height:1.6;}
+    .divider{height:1px;background:#1a1a1a;margin-bottom:40px;}
+    .form{display:flex;flex-direction:column;gap:32px;animation:fadeUp .35s ease;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    .field{display:flex;flex-direction:column;gap:8px;}
+    .flabel{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#3a3a3a;}
+    .fhint{font-size:12px;color:#2e2e2e;margin-top:-2px;line-height:1.5;}
+    textarea{
+      width:100%;background:var(--card);border:1px solid var(--b1);border-radius:10px;
+      padding:16px;color:#b0b0b0;font-size:13.5px;line-height:1.75;
+      font-family:inherit;resize:none;outline:none;
+      transition:border-color .2s,box-shadow .2s;caret-color:var(--accent);
+    }
+    textarea::placeholder{color:#272727;line-height:1.75;}
+    textarea:hover{border-color:var(--b2);}
+    textarea:focus{border-color:rgba(59,91,219,.5);box-shadow:0 0 0 3px rgba(59,91,219,.07);}
+    .selectors{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+    @media(max-width:500px){.selectors{grid-template-columns:1fr;}}
+    .seg{display:flex;gap:4px;}
+    .seg-btn{
+      flex:1;padding:9px 0;background:var(--card);border:1px solid var(--b1);border-radius:8px;
+      color:#3a3a3a;font-size:12px;font-weight:500;font-family:inherit;
+      cursor:pointer;text-align:center;transition:all .15s;
+    }
+    .seg-btn:hover{border-color:var(--b2);color:#666;}
+    .seg-btn.on{background:var(--accent-dim);border-color:var(--accent);color:var(--accent-txt);}
+    .time-stack{display:flex;flex-direction:column;gap:4px;}
+    .time-btn{
+      padding:9px 14px;background:var(--card);border:1px solid var(--b1);border-radius:8px;
+      color:#3a3a3a;font-size:12px;font-weight:500;font-family:inherit;
+      cursor:pointer;text-align:left;transition:all .15s;
+    }
+    .time-btn:hover{border-color:var(--b2);color:#666;}
+    .time-btn.on{background:var(--accent-dim);border-color:var(--accent);color:var(--accent-txt);}
+    .cta-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:10px;}
+    .cta{
+      display:inline-flex;align-items:center;gap:10px;padding:13px 22px;
+      background:var(--accent);color:#fff;border:none;border-radius:10px;
+      font-size:13.5px;font-weight:500;font-family:inherit;cursor:pointer;
+      transition:background .2s,transform .1s;letter-spacing:.01em;
+    }
+    .cta:hover:not(:disabled){background:#3451c7;}
+    .cta:active:not(:disabled){transform:scale(.98);}
+    .cta:disabled{background:#1a1a1a;color:#2a2a2a;cursor:not-allowed;}
+    .cta:disabled svg{opacity:.3;}
+    .cta-hint{font-size:11px;color:#2a2a2a;}
+    .results{animation:fadeUp .4s ease;}
+    .note{
+      display:flex;align-items:flex-start;gap:12px;padding:14px 16px;
+      background:var(--card);border:1px solid var(--b1);border-radius:10px;margin-bottom:36px;
+    }
+    .note-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px;}
+    .note-text{font-size:13px;color:#555;line-height:1.65;}
+    .group{margin-bottom:32px;}
+    .group-hd{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+    .group-icon{display:flex;align-items:center;flex-shrink:0;}
+    .group-title{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+    .group-title.pri{color:var(--accent);}
+    .group-title.sec{color:#2a3a5e;}
+    .group-title.lat{color:#2a2a2a;}
+    .group-line{flex:1;height:1px;background:#1a1a1a;}
+    .group-count{font-size:11px;color:#2a2a2a;background:#1a1a1a;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .task-list{display:flex;flex-direction:column;gap:6px;}
+    .card{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+      padding:14px 16px;background:var(--card);border:1px solid var(--b1);border-radius:10px;
+      transition:border-color .15s;
+    }
+    .card:hover{border-color:var(--b2);}
+    .card.pri{border-left:2px solid var(--accent);padding-left:14px;}
+    .card.lat{opacity:.5;}
+    .card-body{flex:1;min-width:0;}
+    .card-hd{display:flex;align-items:center;gap:10px;margin-bottom:5px;}
+    .card-idx{
+      width:18px;height:18px;border-radius:50%;
+      background:rgba(59,91,219,.15);color:var(--accent-txt);
+      font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    }
+    .card-name{font-size:13.5px;font-weight:500;color:#d0d0d0;line-height:1.4;}
+    .card.lat .card-name{text-decoration:line-through;color:#3a3a3a;}
+    .card-reason{font-size:12px;color:#3a3a3a;line-height:1.55;padding-left:28px;}
+    .card.pri .card-reason{padding-left:28px;}
+    .card-time{font-size:11px;color:#2a2a2a;background:#1a1a1a;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+    .plan{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;padding:22px;margin-bottom:36px;}
+    .plan-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#2a2a2a;margin-bottom:20px;}
+    .step{display:flex;gap:14px;position:relative;}
+    .step:not(:last-child){margin-bottom:20px;}
+    .step:not(:last-child)::before{content:'';position:absolute;left:6px;top:18px;bottom:-20px;width:1px;background:#1e1e1e;}
+    .step-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-top:2px;}
+    .step-dot.s{background:var(--accent);}
+    .step-dot.t{background:#0f0f0f;border:1.5px solid var(--accent);}
+    .step-dot.l{background:#0f0f0f;border:1.5px solid #242424;}
+    .step-body{flex:1;}
+    .step-lbl{display:block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#2a2a2a;margin-bottom:6px;}
+    .step-item{font-size:13px;color:#3a3a3a;line-height:1.5;}
+    .step-item::before{content:'— ';color:#222;}
+    .reset-wrap{display:flex;justify-content:center;padding-top:4px;}
+    .reset-btn{
+      display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#2a2a2a;
+      background:none;border:none;cursor:pointer;font-family:inherit;padding:8px 14px;
+      border-radius:8px;transition:all .15s;
+    }
+    .reset-btn:hover{color:#555;background:var(--card);}
+    .footer{margin-top:64px;text-align:center;}
+    .footer p{font-size:11px;color:#1e1e1e;letter-spacing:.02em;}
+    .hidden{display:none!important;}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <main class="container">
+    <header class="header">
+      <span class="eyebrow">Today's focus</span>
+      <h1 class="title">¿Qué necesitas hacer hoy?</h1>
+      <p class="subtitle" id="subtitle">Dime tus tareas y cómo estás. Organizo tu día.</p>
+    </header>
+    <div class="divider"></div>
+
+    <div id="form-section" class="form">
+      <div class="field">
+        <label class="flabel">Tareas de hoy</label>
+        <p class="fhint">Una por línea o separadas por coma — sin filtros, sin orden.</p>
+        <textarea id="raw-tasks" rows="7" placeholder="Preparar presentación del cliente&#10;Llamar al banco&#10;Sesión de gimnasio&#10;Revisar contrato Q3&#10;Responder emails urgentes"></textarea>
+      </div>
+      <div class="selectors">
+        <div class="field">
+          <label class="flabel">Nivel de energía</label>
+          <div class="seg" id="energy-group">
+            <button class="seg-btn" data-val="baja">Baja</button>
+            <button class="seg-btn on" data-val="media">Media</button>
+            <button class="seg-btn" data-val="alta">Alta</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="flabel">Tiempo disponible</label>
+          <div class="time-stack" id="time-group">
+            <button class="time-btn" data-val="<1h">Menos de 1 h</button>
+            <button class="time-btn on" data-val="1-2h">1 – 2 horas</button>
+            <button class="time-btn" data-val="2-4h">2 – 4 horas</button>
+            <button class="time-btn" data-val="4h+">Más de 4 h</button>
+          </div>
+        </div>
+      </div>
+      <div class="cta-wrap">
+        <button class="cta" id="submit-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          Organizar mi día
+        </button>
+        <span class="cta-hint" id="cta-hint">Añade al menos una tarea para continuar</span>
+      </div>
+    </div>
+
+    <div id="results-section" class="results hidden"></div>
+  </main>
+  <footer class="footer"><p>Hecho para ayudarte a empezar, no a planificar perfectamente.</p></footer>
+</div>
+
+<script>
+let energy='media', time='1-2h';
+const ta=document.getElementById('raw-tasks');
+const btn=document.getElementById('submit-btn');
+
+document.querySelectorAll('#energy-group .seg-btn').forEach(b=>{
+  b.addEventListener('click',()=>{document.querySelectorAll('#energy-group .seg-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');energy=b.dataset.val;});
+});
+document.querySelectorAll('#time-group .time-btn').forEach(b=>{
+  b.addEventListener('click',()=>{document.querySelectorAll('#time-group .time-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');time=b.dataset.val;});
+});
+ta.addEventListener('input',()=>{
+  const ok=ta.value.trim().length>3;
+  btn.disabled=!ok;
+  document.getElementById('cta-hint').style.display=ok?'none':'block';
+});
+
+const SIGNALS={
+  urgencia:{palabras:['urgente','urgentemente','asap','hoy mismo','antes de','deadline','fecha límite','vence','vencimiento','entrega','entregar','enviar','reunión','meeting','llamar','llamada','confirmar','pago','pagar','factura','firmar','firma','cliente','jefe','jefa','director','equipo espera','bloqueado','bloqueada','espera mi','necesitan'],peso:35},
+  cognitivo:{palabras:['crear','diseñar','desarrollar','programar','escribir','redactar','analizar','revisar contrato','revisar propuesta','preparar presentación','preparar informe','preparar estrategia','planificar proyecto','arquitectura','investigar a fondo','resolver'],peso:12},
+  rutina:{palabras:['revisar email','responder email','leer','ver','mirar','organizar carpetas','ordenar','actualizar','subir','descargar','imprimir','escanear','comprar','hacer la compra','recoger','ir a'],peso:-5},
+  desbloqueador:{palabras:['para poder','antes de que','depende de','necesario para','para que','sin esto no','sin lo cual','prerequisito','bloqueante'],peso:20},
+  aplazable:{palabras:['cuando pueda','si hay tiempo','algún día','eventualmente','me gustaría','pensar en','explorar','ver si','quizás','tal vez','puede que','a largo plazo','para el futuro','idealmente'],peso:-30},
+  estaSemana:{palabras:['esta semana','antes del viernes','antes del jueves','antes del miércoles','antes del martes','antes del lunes'],peso:15},
+  bienestar:{palabras:['ejercicio','entrenar','entrenamiento','gimnasio','gym','correr','running','salir a correr','caminar','pasear','yoga','pilates','estirar','estiramiento','meditar','meditación','descansar','dormir','siesta','ducha','ducharse','comer bien','desayunar','almorzar','terapia','psicólogo','médico','doctor','deporte','bicicleta','nadar','natación','respiración','desconectar','aire libre','naturaleza','mindfulness'],peso:22}
+};
+const DURACION=[
+  {pat:/\b(llamar|call|confirmar|responder|reply|contestar|email|correo|slack|mensaje|whatsapp|imprimir|escanear|subir|descargar|enviar archivo)\b/i,t:'~15 min',m:15},
+  {pat:/\b(revisar|leer|ver|mirar|actualizar|ordenar|organizar|comprar|meditar|meditación|estirar|estiramiento|ducha|ducharse|desayunar)\b/i,t:'~30 min',m:30},
+  {pat:/\b(ejercicio|entrenar|entrenamiento|gimnasio|gym|correr|running|caminar|pasear|yoga|pilates|bicicleta|nadar|natación|deporte|preparar|redactar|escribir|crear|diseñar|analizar|investigar|reunión|meeting)\b/i,t:'~1 h',m:60},
+  {pat:/\b(desarrollar|programar|construir|implementar|arquitectura|proyecto|presentación completa|informe completo)\b/i,t:'~2–4 h',m:180},
+];
+const TMIN={'<1h':60,'1-2h':120,'2-4h':240,'4h+':480};
+
+function estDur(n){for(const d of DURACION){if(d.pat.test(n))return d;}return{t:'~30–60 min',m:45};}
+
+function puntuar(nombre,en,ti){
+  const low=nombre.toLowerCase();let score=50;const fac=[];
+  for(const[tipo,cfg]of Object.entries(SIGNALS)){
+    for(const kw of cfg.palabras){
+      if(low.includes(kw)){score+=cfg.peso;if(cfg.peso>0)fac.push({tipo,peso:cfg.peso});break;}
+    }
+  }
+  const dur=estDur(nombre);const maxM=TMIN[ti];
+  if(dur.m>maxM){score-=25;fac.push({tipo:'no_cabe',peso:-25});}
+  else if(dur.m<=maxM*.25)score+=8;
+  const esCog=SIGNALS.cognitivo.palabras.some(k=>low.includes(k));
+  const esRut=SIGNALS.rutina.palabras.some(k=>low.includes(k));
+  const esBien=SIGNALS.bienestar.palabras.some(k=>low.includes(k));
+  if(en==='alta'&&esCog){score+=15;fac.push({tipo:'energia_match',peso:15});}
+  if(en==='baja'&&esCog){score-=20;fac.push({tipo:'energia_mismatch',peso:-20});}
+  if(en==='baja'&&esRut){score+=10;fac.push({tipo:'rutina_ok',peso:10});}
+  if(en==='media'&&esCog)score+=5;
+  if(esBien){if(en==='baja'){score+=10;fac.push({tipo:'bienestar_boost',peso:10});}fac.push({tipo:'bienestar',peso:0});}
+  return{nombre,score:Math.max(0,Math.min(100,score)),fac,dur};
+}
+
+function razon(t,tipo,en){
+  const{fac,dur}=t;
+  const urg=fac.some(f=>f.tipo==='urgencia');
+  const desb=fac.some(f=>f.tipo==='desbloqueador');
+  const noCabe=fac.some(f=>f.tipo==='no_cabe');
+  const mism=fac.some(f=>f.tipo==='energia_mismatch');
+  const aplaz=fac.some(f=>f.tipo==='aplazable');
+  const rut=fac.some(f=>f.tipo==='rutina_ok');
+  const bien=fac.some(f=>f.tipo==='bienestar'||f.tipo==='bienestar_boost');
+  const bienB=fac.some(f=>f.tipo==='bienestar_boost');
+  if(tipo==='priority'){
+    if(bien&&urg)return'Urgente y además cuida tu energía. Hazlo: el resto del día irá mejor.';
+    if(bien)return bienB?'Con poca energía, esto es exactamente lo que necesitas. Te recarga para el resto.':'Cuida tu cuerpo y tu mente. Rindes mejor en todo lo demás cuando lo haces.';
+    if(urg&&desb)return'Es urgente y además desbloquea otras tareas. Va primero.';
+    if(urg)return'Alguien espera una respuesta o acción de tu parte. No puede esperar más.';
+    if(desb)return'Otras cosas dependen de que esto esté hecho. Hazlo y desbloquea el resto.';
+    if(en==='alta')return`Tienes energía para abordarlo bien ahora. ${dur.t} de foco y listo.`;
+    return'Es la tarea con mayor impacto real en tu día según tu contexto.';
+  }
+  if(tipo==='secondary'){
+    if(bien)return'Importante para tu bienestar. Si acabas las prioridades, no te lo saltes.';
+    if(noCabe)return`Puede que no te dé tiempo hoy (${dur.t}), pero empiézalo si terminas antes.`;
+    if(en==='baja')return'Importante, pero espera a que hayas hecho lo esencial primero.';
+    if(rut)return`Tarea de rutina (${dur.t}). Fácil de meter entre medias.`;
+    return'Vale la pena hacerlo hoy si terminas las prioridades. Sin urgencia inmediata.';
+  }
+  if(aplaz)return'Lo marcaste como algo sin urgencia. Agéndalo para otro día sin culpa.';
+  if(mism)return`Requiere foco profundo y hoy tienes poca energía. Mejor mañana.`;
+  if(noCabe)return`Con el tiempo disponible hoy (${dur.t} estimado) no encaja. Apártalo.`;
+  return'Sin urgencia real hoy. Queda registrado para que no lo pierdas.';
+}
+
+function nota(en,ti,total,nTop){
+  if(ti==='<1h'&&en==='baja')return`Solo tienes poco tiempo y poca energía. Una tarea. Solo una. Ya es suficiente.`;
+  if(en==='baja')return`Hoy no es un día de máximo rendimiento, y está bien. Céntrate en lo esencial.`;
+  if(ti==='<1h')return`Poco tiempo, pero enfocado. ${nTop} tareas claras es todo lo que necesitas ahora.`;
+  if(en==='alta'&&ti==='4h+')return`Tienes energía y tiempo. Buen día para cerrar cosas importantes.`;
+  return`No tienes que hacer todo. Solo tienes que empezar. El resto va cayendo solo.`;
+}
+
+function parsear(raw){return raw.split(/\n|,|;/).map(t=>t.replace(/^[-•*\d.)]+\s*/,'').trim()).filter(t=>t.length>2);}
+
+function priorizar(raw,en,ti){
+  const nombres=parsear(raw);if(!nombres.length)return null;
+  const tareas=nombres.map(n=>puntuar(n,en,ti));
+  tareas.sort((a,b)=>b.score-a.score);
+  const total=tareas.length,nTop=Math.min(3,total),nMid=Math.min(3,Math.max(0,total-nTop));
+  const top=tareas.slice(0,nTop),mid=tareas.slice(nTop,nTop+nMid),late=tareas.slice(nTop+nMid);
+  const toCard=(t,tipo)=>({name:t.nombre,reason:razon(t,tipo,en),time:t.dur.t});
+  const tC=top.map(t=>toCard(t,'priority')),mC=mid.map(t=>toCard(t,'secondary')),lC=late.map(t=>toCard(t,'postpone'));
+  return{top:tC,mid:mC,late:lC,plan:{start:tC.slice(0,2),then:mC.slice(0,2),later:lC.slice(0,2)},nota:nota(en,ti,total,nTop)};
+}
+
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function svgPri(){return`<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#3b5bdb" stroke-width="1.6" style="display:block"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>`;}
+function svgSec(){return`<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#2a3a5e" stroke-width="1.6" style="display:block"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7h6M5 10h4"/></svg>`;}
+function svgLat(){return`<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#2a2a2a" stroke-width="1.6" style="display:block"><circle cx="8" cy="8" r="6"/><path d="M8 5v4"/><circle cx="8" cy="11.5" r=".5" fill="#2a2a2a"/></svg>`;}
+function svgReset(){return`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 8a5 5 0 1 1-5-5"/><path d="M13 3v3h-3"/></svg>`;}
+
+function card(t,cls,idx){
+  const badge=idx!==undefined?`<span class="card-idx">${idx+1}</span>`:'';
+  const timeTag=t.time?`<span class="card-time">${esc(t.time)}</span>`:'';
+  return`<div class="card ${cls}"><div class="card-body"><div class="card-hd">${badge}<span class="card-name">${esc(t.name)}</span></div><p class="card-reason">${esc(t.reason)}</p></div>${timeTag}</div>`;
+}
+
+function group(svg,title,cls,tasks,cardCls,showIdx){
+  if(!tasks||!tasks.length)return'';
+  const cards=tasks.map((t,i)=>card(t,cardCls,showIdx?i:undefined)).join('');
+  return`<div class="group"><div class="group-hd"><span class="group-icon">${svg}</span><span class="group-title ${cls}">${title}</span><div class="group-line"></div><span class="group-count">${tasks.length}</span></div><div class="task-list">${cards}</div></div>`;
+}
+
+function step(dotCls,label,tasks){
+  if(!tasks||!tasks.length)return'';
+  const items=tasks.map(t=>`<p class="step-item">${esc(t.name)}</p>`).join('');
+  return`<div class="step"><div class="step-dot ${dotCls}"></div><div class="step-body"><span class="step-lbl">${label}</span>${items}</div></div>`;
+}
+
+function render(r){
+  return`<div class="note"><div class="note-dot"></div><p class="note-text">${esc(r.nota)}</p></div>
+${group(svgPri(),'Hazlo ahora','pri',r.top,'pri',true)}
+${group(svgSec(),'Después, si puedes','sec',r.mid,'sec',false)}
+${group(svgLat(),'Para otro día','lat',r.late,'lat',false)}
+<div class="plan"><p class="plan-label">Plan del día</p>${step('s','Empieza con',r.plan.start)}${step('t','Luego haz',r.plan.then)}${step('l','Deja para después',r.plan.later)}</div>
+<div class="reset-wrap"><button class="reset-btn" id="reset-btn">${svgReset()} Reorganizar con otras tareas</button></div>`;
+}
+
+btn.addEventListener('click',()=>{
+  const r=priorizar(ta.value,energy,time);if(!r)return;
+  document.getElementById('form-section').classList.add('hidden');
+  document.getElementById('subtitle').textContent='Aquí está tu plan. Un paso a la vez.';
+  const el=document.getElementById('results-section');
+  el.innerHTML=render(r);el.classList.remove('hidden');
+  document.getElementById('reset-btn').addEventListener('click',()=>{
+    el.classList.add('hidden');el.innerHTML='';
+    document.getElementById('form-section').classList.remove('hidden');
+    document.getElementById('subtitle').textContent='Dime tus tareas y cómo estás. Organizo tu día.';
+  });
+});
+</script>
+</body>
+</html>

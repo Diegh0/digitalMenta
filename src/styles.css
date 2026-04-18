@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0f0f0f;
+  color: #c8c8c8;
+  min-height: 100vh;
+}
+
+::selection { background: rgba(59, 91, 219, 0.3); color: #a0b4ff; }
+
+:focus-visible { outline: 2px solid rgba(59, 91, 219, 0.6); outline-offset: 2px; }
+
+:root {
+  --bg:         #0f0f0f;
+  --bg-card:    #141414;
+  --bg-hover:   #181818;
+  --border:     #1e1e1e;
+  --border-md:  #262626;
+  --accent:     #3b5bdb;
+  --accent-dim: #1a1f2e;
+  --accent-txt: #7c9ef8;
+  --text-1:     #f0f0f0;
+  --text-2:     #888;
+  --text-3:     #444;
+  --text-4:     #2e2e2e;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  12px;
+  --ease:       cubic-bezier(0.16, 1, 0.3, 1);
+}
