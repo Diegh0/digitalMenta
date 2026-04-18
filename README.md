@@ -1,182 +1,170 @@
-# 📋 Organiza tu día
+# Organizador de tareas por contexto
 
-Una aplicación web minimalista construida con **Angular 19** que ayuda a los usuarios a priorizar sus tareas del día según su nivel de energía y el tiempo disponible.
-
----
-
-## 🎯 Problema que resuelve
-
-Los usuarios se sienten abrumados cuando tienen muchas tareas y no saben por dónde empezar. Esto genera estrés y procrastinación. Esta app ayuda a tomar acción rápida con un plan claro y sin fricción.
+Aplicación web que ayuda a priorizar tareas del día cruzando lo que tienes pendiente con tu energía y tiempo disponibles.
 
 ---
 
-## ✨ Funcionalidades
+## Problema
 
-- Entrada libre de tareas (una por línea o separadas por coma)
-- Selector de nivel de energía: baja / media / alta
-- Selector de tiempo disponible: <1h / 1-2h / 2-4h / 4h+
-- Resultado con:
-  - **Top 3 tareas prioritarias** (con razón explicada)
-  - **Tareas secundarias** (si quedan energía y tiempo)
-  - **Tareas a posponer** (sin culpa)
-  - **Plan diario simple** (empieza con → luego haz → deja para después)
+Las listas de tareas no resuelven el problema real: saber por cuál empezar.
+
+Tener diez cosas pendientes con poca energía o poco tiempo genera parálisis. La mayoría de apps de productividad te piden que organices, etiquetes y planifiques, cuando lo que el usuario necesita en ese momento es una respuesta clara: *¿qué hago ahora mismo?*
 
 ---
 
-## 🛠 Tecnología
+## Solución
 
-| Elemento         | Detalle                          |
-|------------------|----------------------------------|
-| Framework        | Angular 19 (Standalone Components) |
-| Formularios      | `FormsModule` con `ngModel`      |
-| Estilos          | CSS encapsulado por componente   |
-| Fuente           | DM Sans (Google Fonts)           |
-| Lógica de IA     | Algoritmo de puntuación local    |
-| Backend          | Ninguno (100% frontend)          |
+El usuario introduce sus tareas en texto libre, indica su nivel de energía actual (baja / media / alta) y el tiempo disponible (menos de 1h hasta más de 4h). La app procesa esa información con un algoritmo de puntuación semántica y devuelve:
+
+- Las 3 tareas más relevantes para ese contexto concreto
+- Tareas secundarias si sobra tiempo
+- Tareas a posponer sin culpa
+- Un plan de acción secuencial: empieza con → luego haz → deja para después
+
+No requiere cuenta, no guarda datos, no tiene backend. Funciona en el momento.
 
 ---
 
-## 📁 Estructura del proyecto
+## Funcionalidades
+
+- Entrada de tareas en texto libre (una por línea, coma o punto y coma)
+- Selector de energía con tres niveles: baja, media, alta
+- Selector de tiempo disponible: menos de 1h / 1–2h / 2–4h / más de 4h
+- Algoritmo de priorización que cruza urgencia, carga cognitiva, bienestar físico, duración estimada y energía disponible
+- Razón específica por tarea explicando por qué está en ese grupo
+- Plan diario en tres pasos con orden de ejecución
+- Nota motivacional adaptada al contexto del usuario
+- Versión Angular completa y versión standalone (un único `index.html` sin dependencias)
+- Diseño dark UI, responsive, sin emojis, con iconografía SVG
+
+---
+
+## Tech Stack
+
+| Elemento | Detalle |
+|---|---|
+| Framework | Angular 19 — Standalone Components, sin NgModule |
+| Formularios | `FormsModule` con `ngModel` |
+| Tipografía | Inter (Google Fonts) |
+| Estilos | CSS encapsulado por componente + variables CSS globales |
+| Lógica de priorización | Algoritmo de puntuación local en TypeScript puro |
+| Backend | Ninguno — 100% frontend |
+| Build | Angular CLI / `@angular-devkit/build-angular` |
+
+---
+
+## Estructura del proyecto
 
 ```
 task-prioritizer/
-├── src/
-│   ├── app/
-│   │   ├── components/
-│   │   │   ├── task-input/         # Formulario de entrada
-│   │   │   │   └── task-input.component.ts
-│   │   │   ├── results/            # Vista de resultados
-│   │   │   │   └── results.component.ts
-│   │   │   ├── task-group/         # Grupo de tareas (prioritarias, secundarias, etc.)
-│   │   │   │   └── task-group.component.ts
-│   │   │   └── task-card/          # Tarjeta individual de tarea
-│   │   │       └── task-card.component.ts
-│   │   ├── models/
-│   │   │   └── task.models.ts      # Interfaces TypeScript
-│   │   ├── services/
-│   │   │   └── task-prioritizer.service.ts  # Lógica de priorización
-│   │   └── app.component.ts        # Componente raíz
-│   ├── main.ts                     # Bootstrap de la app
-│   ├── index.html                  # HTML principal
-│   └── styles.css                  # Estilos globales
-├── index.html                      # ⚡ Versión standalone (sin build)
-├── angular.json
-├── package.json
-└── tsconfig.json
+├── index.html                          # Versión standalone (sin build ni npm)
+└── src/
+    ├── styles.css                      # Variables CSS y reset global
+    ├── main.ts                         # Bootstrap Angular
+    ├── index.html                      # Entry point Angular
+    └── app/
+        ├── app.component.ts            # Raíz — gestiona el estado global
+        ├── models/
+        │   └── task.models.ts          # Interfaces TypeScript
+        ├── services/
+        │   └── task-prioritizer.service.ts   # Motor de priorización
+        └── components/
+            ├── task-input/             # Formulario de entrada
+            ├── results/                # Vista de resultados
+            ├── task-group/             # Grupo de tareas con cabecera
+            └── task-card/             # Tarjeta individual de tarea
 ```
 
 ---
 
-## 🚀 Cómo usar
+## Cómo ejecutar en local
 
-### Opción 1 — Versión standalone (sin instalación)
+**Opción A — Sin instalación**
 
-Abre directamente el archivo `index.html` en tu navegador. Funciona sin build ni dependencias.
+Abre el archivo `index.html` de la raíz directamente en el navegador. Contiene todo: estilos, lógica y algoritmo en un único archivo.
 
-### Opción 2 — Proyecto Angular completo
+**Opción B — Proyecto Angular completo**
 
 ```bash
-# 1. Instalar dependencias
+# Clonar o descomprimir el proyecto
+cd task-prioritizer
+
+# Instalar dependencias
 npm install
 
-# 2. Arrancar el servidor de desarrollo
+# Arrancar servidor de desarrollo
+ng serve
+# o
 npm start
 
-# 3. Abrir en el navegador
+# Abrir en el navegador
 # http://localhost:4200
 ```
 
-### Build de producción
-
 ```bash
+# Build de producción
 npm run build
-# Los archivos se generan en dist/task-prioritizer/
+# Salida en dist/task-prioritizer/
 ```
 
----
-
-## 🧠 Lógica de priorización
-
-El servicio `TaskPrioritizerService` asigna una puntuación (0–100) a cada tarea basándose en:
-
-| Factor                     | Ajuste de puntuación       |
-|----------------------------|----------------------------|
-| Palabras de urgencia       | +20 puntos                 |
-| Tareas pesadas + energía alta | +10 puntos              |
-| Tareas ligeras + energía baja | +10 puntos              |
-| Tareas pesadas + energía baja | -10 puntos              |
-| Tarea larga + poco tiempo  | -15 puntos                 |
-| Mucho tiempo disponible    | +5 puntos                  |
-
-Las tareas se ordenan por puntuación y se distribuyen:
-- **Top 3** → Prioritarias
-- **4ª a 6ª** → Secundarias
-- **7ª en adelante** → Posponer
+Requisitos: Node.js 18+ y Angular CLI instalado globalmente (`npm install -g @angular/cli`).
 
 ---
 
-## 🎨 Decisiones de diseño
+## Uso de IA
 
-- **Una sola pantalla**: el input se reemplaza visualmente por los resultados
-- **Sin sidebar, sin dashboard**: foco total en la tarea actual
-- **Paleta monocromática** con un único acento azul (`#3B82F6`)
-- **Tipografía DM Sans**: moderna, legible y sin exceso de carácter
-- **Max-width 660px**: columna centrada que no fatiga la vista
-- **Animación mínima**: solo `fadeIn` en la transición al resultado
+**Herramienta utilizada: Claude (Anthropic)**
 
----
+El proyecto se desarrolló en una sesión de trabajo asistida por IA donde Claude actuó como par técnico en múltiples fases:
 
-## 📐 Interfaces TypeScript
+**Arquitectura y scaffolding**
+Se partió de un prompt de especificación completa (estructura de componentes, modelos de datos, tech stack). Claude generó la base del proyecto con toda la estructura de carpetas, interfaces TypeScript y componentes standalone de Angular 19.
 
-```typescript
-export type EnergyLevel = 'baja' | 'media' | 'alta';
-export type TimeAvailable = '<1h' | '1-2h' | '2-4h' | '4h+';
+**Diseño del algoritmo de priorización**
+El algoritmo evolucionó en varias iteraciones. Comenzó como un sistema simple de palabras clave con pesos fijos. Tras preguntar explícitamente cómo mejorar el razonamiento, Claude propuso cruzar múltiples señales semánticas (urgencia, carga cognitiva, desbloqueadores, aplazabilidad) con el contexto del usuario (energía y tiempo), generando razones específicas por tarea en lugar de mensajes genéricos.
 
-export interface TaskInput {
-  rawTasks: string;
-  energyLevel: EnergyLevel;
-  timeAvailable: TimeAvailable;
-}
+**Rediseño visual**
+Se usó Claude para iterar sobre el UI con un prompt de dirección estética concreto (dark UI, tipografía Inter, iconografía SVG, sin emojis). Claude generó el sistema de variables CSS, los estilos por componente y el mockup de referencia visual antes de escribir código.
 
-export interface PrioritizedTask {
-  name: string;
-  reason: string;
-  estimatedTime?: string;
-}
-
-export interface AIResponse {
-  topPriority: PrioritizedTask[];
-  secondary: PrioritizedTask[];
-  postpone: PrioritizedTask[];
-  dailyPlan: DailyPlan;
-  motivationalNote: string;
-}
-```
+**Debugging**
+Un error de TypeScript en producción (`Property 'prioritize' does not exist`) se resolvió en una sola iteración: Claude identificó la inconsistencia de nombre entre el servicio y el componente y reescribió el servicio con lógica local completa, eliminando la dependencia externa que había quedado de una versión anterior.
 
 ---
 
-## 📦 Componentes principales
+## Registro de prompts
 
-| Componente              | Responsabilidad                                      |
-|-------------------------|------------------------------------------------------|
-| `AppComponent`          | Estado global: muestra input o resultados            |
-| `TaskInputComponent`    | Formulario con textarea, selectores y botón submit   |
-| `ResultsComponent`      | Renderiza grupos de tareas y el plan diario          |
-| `TaskGroupComponent`    | Agrupa tarjetas con título, ícono y contador         |
-| `TaskCardComponent`     | Muestra una tarea con nombre, tiempo y razón         |
-| `TaskPrioritizerService`| Parsea, puntúa y ordena las tareas                   |
+**Prompt 1 — Especificación inicial del proyecto**
+
+> *"Build a simple, clean and high-quality web app using Angular (latest version). The user inputs a raw list of tasks, their energy level and available time. The app outputs top 3 priority tasks, secondary tasks, tasks to postpone, a short reason for each task, and a simple daily plan."*
+
+Funcionó porque era específico en inputs, outputs y estructura esperada. No dejaba espacio a interpretación sobre qué construir. Claude generó la arquitectura de componentes y los modelos TypeScript directamente desde este prompt sin necesidad de aclaraciones.
 
 ---
 
-## 💡 Posibles mejoras futuras
+**Prompt 2 — Mejora del algoritmo de priorización**
 
-- [ ] Integración con Claude API para razonamiento más inteligente
-- [ ] Exportar el plan como texto o PDF
-- [ ] Historial de sesiones (localStorage)
-- [ ] Modo oscuro
-- [ ] Animaciones de entrada por tarea (stagger)
-- [ ] Arrastrar para reordenar tareas manualmente
+> *"Me gusta el nuevo algoritmo pero quiero que cosas como el ejercicio se le dé cierto peso ya que es salud y te ayuda a despejar la mente para futuras tareas."*
+
+Prompt corto pero con razonamiento propio incluido ("ayuda a despejar la mente"). Eso fue clave: Claude no solo añadió palabras clave de bienestar sino que diseñó una lógica adicional donde las tareas de bienestar reciben un boost extra cuando la energía es baja, que es exactamente cuando más se necesitan.
 
 ---
 
-> *"No necesitas hacer todo. Solo necesitas empezar."*
+**Prompt 3 — Rediseño visual completo**
+
+> *"Redesign my task organization app UI to achieve a premium, minimal, and elegant aesthetic. The current design feels too basic, childish (emojis), and lacks visual impact. Dark UI (primary background: #0f0f0f). Remove all emojis, replace with subtle SVG iconography. Accent color: muted blue. Make the input area feel important and central."*
+
+Funcionó por la combinación de problema concreto ("childish, emojis"), referencia de productos reales (Linear, Notion dark mode) y restricciones técnicas claras (color hex, tipo de iconografía). Claude generó primero un mockup visual de referencia y después aplicó el diseño a todos los componentes Angular.
+
+---
+
+## Mejoras con más tiempo
+
+- **Persistencia local**: guardar el historial de sesiones con `localStorage` para que el usuario pueda revisar planes anteriores
+- **Exportación**: generar el plan diario como texto plano o PDF descargable
+- **Arrastrar para reordenar**: permitir al usuario ajustar manualmente el orden antes de confirmar el plan
+- **Integración opcional con LLM**: conectar a Claude API o similar para tareas con contexto complejo que el algoritmo semántico no puede inferir (ej: "terminar lo de ayer con Pedro")
+- **Modo de revisión nocturna**: variante del flujo donde el usuario planifica el día siguiente antes de dormir
+
+---
+
+> La IA se usó como acelerador técnico, no como sustituto del criterio de diseño. Cada decisión de arquitectura, lógica y UI fue revisada, cuestionada e iterada durante el proceso.
