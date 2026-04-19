@@ -3,6 +3,11 @@
 Aplicación web que ayuda a priorizar tareas del día cruzando lo que tienes pendiente con tu energía y tiempo disponibles.
 
 ---
+## Demo
+
+[Ver demo en Loom](https://www.loom.com/share/5fe3d5aab96d473d9055ecaeafcec73e)
+
+---
 
 ## Problema
 
@@ -34,8 +39,7 @@ No requiere cuenta, no guarda datos, no tiene backend. Funciona en el momento.
 - Razón específica por tarea explicando por qué está en ese grupo
 - Plan diario en tres pasos con orden de ejecución
 - Nota motivacional adaptada al contexto del usuario
-- Versión Angular completa y versión standalone (un único `index.html` sin dependencias)
-- Diseño dark UI, responsive, sin emojis, con iconografía SVG
+- Diseño dark UI, responsive, con iconografía SVG
 
 ---
 
@@ -45,11 +49,9 @@ No requiere cuenta, no guarda datos, no tiene backend. Funciona en el momento.
 |---|---|
 | Framework | Angular 19 — Standalone Components, sin NgModule |
 | Formularios | `FormsModule` con `ngModel` |
-| Tipografía | Inter (Google Fonts) |
 | Estilos | CSS encapsulado por componente + variables CSS globales |
 | Lógica de priorización | Algoritmo de puntuación local en TypeScript puro |
 | Backend | Ninguno — 100% frontend |
-| Build | Angular CLI / `@angular-devkit/build-angular` |
 
 ---
 
@@ -79,11 +81,7 @@ task-prioritizer/
 
 ## Cómo ejecutar en local
 
-**Opción A — Sin instalación**
-
-Abre el archivo `index.html` de la raíz directamente en el navegador. Contiene todo: estilos, lógica y algoritmo en un único archivo.
-
-**Opción B — Proyecto Angular completo**
+**Proyecto Angular completo**
 
 ```bash
 # Clonar o descomprimir el proyecto
@@ -94,8 +92,6 @@ npm install
 
 # Arrancar servidor de desarrollo
 ng serve
-# o
-npm start
 
 # Abrir en el navegador
 # http://localhost:4200
@@ -113,21 +109,18 @@ Requisitos: Node.js 18+ y Angular CLI instalado globalmente (`npm install -g @an
 
 ## Uso de IA
 
-**Herramienta utilizada: Claude (Anthropic)**
+**Herramientas utilizadas: Claude (Anthropic) y ChatGPT (OpenAI)**
 
-El proyecto se desarrolló en una sesión de trabajo asistida por IA donde Claude actuó como par técnico en múltiples fases:
+El flujo de trabajo fue deliberado: ChatGPT actuó como asistente de prompt engineering para estructurar y redactar en inglés los prompts más importantes antes de enviarlos a Claude. El criterio, la dirección y el detalle de qué construir eran propios — ChatGPT ayudó a formularlos con precisión técnica. La ejecución real (código, diseño, lógica) la realizó Claude.
 
 **Arquitectura y scaffolding**
-Se partió de un prompt de especificación completa (estructura de componentes, modelos de datos, tech stack). Claude generó la base del proyecto con toda la estructura de carpetas, interfaces TypeScript y componentes standalone de Angular 19.
+La idea de qué construir y cómo estructurarlo era propia. ChatGPT ayudó a convertir ese criterio en un prompt técnico en inglés con los requisitos bien delimitados. Claude tomó ese prompt y generó la base del proyecto: estructura de carpetas, interfaces TypeScript y componentes standalone de Angular 19.
 
 **Diseño del algoritmo de priorización**
-El algoritmo evolucionó en varias iteraciones. Comenzó como un sistema simple de palabras clave con pesos fijos. Tras preguntar explícitamente cómo mejorar el razonamiento, Claude propuso cruzar múltiples señales semánticas (urgencia, carga cognitiva, desbloqueadores, aplazabilidad) con el contexto del usuario (energía y tiempo), generando razones específicas por tarea en lugar de mensajes genéricos.
+Las necesidades concretas partían del criterio propio — por ejemplo, dar peso al bienestar físico porque ayuda a rendir mejor el resto del día. Claude tradujo esa lógica en señales semánticas con pesos diferenciados, cruce con energía disponible y tiempo, y razones específicas por tarea en lugar de mensajes genéricos.
 
 **Rediseño visual**
-Se usó Claude para iterar sobre el UI con un prompt de dirección estética concreto (dark UI, tipografía Inter, iconografía SVG, sin emojis). Claude generó el sistema de variables CSS, los estilos por componente y el mockup de referencia visual antes de escribir código.
-
-**Debugging**
-Un error de TypeScript en producción (`Property 'prioritize' does not exist`) se resolvió en una sola iteración: Claude identificó la inconsistencia de nombre entre el servicio y el componente y reescribió el servicio con lógica local completa, eliminando la dependencia externa que había quedado de una versión anterior.
+La dirección estética (dark UI, sin emojis, iconografía SVG, tipografía técnica) era una decisión propia. ChatGPT ayudó a estructurar el prompt de diseño en inglés con las restricciones técnicas necesarias para que Claude lo interpretara sin ambigüedad. Claude generó el mockup de referencia y aplicó el sistema de diseño a todos los componentes.
 
 ---
 
@@ -155,6 +148,7 @@ Prompt corto pero con razonamiento propio incluido ("ayuda a despejar la mente")
 
 Funcionó por la combinación de problema concreto ("childish, emojis"), referencia de productos reales (Linear, Notion dark mode) y restricciones técnicas claras (color hex, tipo de iconografía). Claude generó primero un mockup visual de referencia y después aplicó el diseño a todos los componentes Angular.
 
+*"El prompt 1 y 3 al ser tan extensos no estan puestos aqui en su totalidad, por eso adjunto en el proyecto un txt con los promps completos"*
 ---
 
 ## Mejoras con más tiempo
