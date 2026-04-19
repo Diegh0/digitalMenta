@@ -128,7 +128,7 @@ La dirección estética (dark UI, sin emojis, iconografía SVG, tipografía téc
 
 **Prompt 1 — Especificación inicial del proyecto**
 
-> *"Build a simple, clean and high-quality web app using Angular (latest version). The user inputs a raw list of tasks, their energy level and available time. The app outputs top 3 priority tasks, secondary tasks, tasks to postpone, a short reason for each task, and a simple daily plan."*
+> *" You are a senior frontend developer and product designer...Build a simple, clean and high-quality web app using Angular (latest version)..."*
 
 Funcionó porque era específico en inputs, outputs y estructura esperada. No dejaba espacio a interpretación sobre qué construir. Claude generó la arquitectura de componentes y los modelos TypeScript directamente desde este prompt sin necesidad de aclaraciones.
 
@@ -144,7 +144,7 @@ Prompt corto pero con razonamiento propio incluido ("ayuda a despejar la mente")
 
 **Prompt 3 — Rediseño visual completo**
 
-> *"Redesign my task organization app UI to achieve a premium, minimal, and elegant aesthetic. The current design feels too basic, childish (emojis), and lacks visual impact. Dark UI (primary background: #0f0f0f). Remove all emojis, replace with subtle SVG iconography. Accent color: muted blue. Make the input area feel important and central."*
+> *"You are a senior product designer and frontend expert.Redesign my task organization app UI to achieve a premium, minimal, and elegant aesthetic..."*
 
 Funcionó por la combinación de problema concreto ("childish, emojis"), referencia de productos reales (Linear, Notion dark mode) y restricciones técnicas claras (color hex, tipo de iconografía). Claude generó primero un mockup visual de referencia y después aplicó el diseño a todos los componentes Angular.
 
